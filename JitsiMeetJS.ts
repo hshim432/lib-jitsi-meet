@@ -36,6 +36,7 @@ import * as ConnectionQualityEvents
     from './service/connectivity/ConnectionQualityEvents';
 import * as E2ePingEvents from './service/e2eping/E2ePingEvents';
 import { createGetUserMediaEvent } from './service/statistics/AnalyticsEvents';
+import { VideoType } from './service/RTC/VideoType';
 
 const logger = Logger.getLogger(__filename);
 
@@ -395,6 +396,37 @@ export default {
 
                 return Promise.reject(error);
             });
+    },
+    createLocalTracksFromMediaStream(mediaStream: MediaStream) {
+        if(!mediaStream) return;
+        const tracks = mediaStream.getTracks();
+        if(tracks.length <= 0) return;
+
+        let metaDatas = [];
+        const audioTracks = mediaStream.getAudioTracks();
+        if(audioTracks.length) {
+            metaDatas.push({
+                sourceId: null,
+                sourceType: 'proxy',
+                stream: mediaStream,
+                track: audioTracks[0],
+                effects: [],
+            })
+        }
+
+        const videoTracks = mediaStream.getVideoTracks();
+        if(videoTracks.length) {
+            metaDatas.push({
+                sourceId: null,
+                sourceType: 'proxy',
+                stream: mediaStream,
+                track: videoTracks[0],
+                videoType: VideoType.CAMERA,
+                effects: [],
+            }); 
+        }
+
+        return RTC.createLocalTracks(metaDatas)
     },
 
     /**
