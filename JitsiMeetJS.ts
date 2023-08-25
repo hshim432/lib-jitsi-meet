@@ -405,22 +405,24 @@ export default {
         let metaDatas = [];
         const audioTracks = mediaStream.getAudioTracks();
         if(audioTracks.length) {
+            const audioStream = new MediaStream(audioTracks);
             metaDatas.push({
                 sourceId: null,
                 sourceType: 'proxy',
-                stream: mediaStream,
-                track: audioTracks[0],
+                stream: audioStream,
+                track: audioStream.getAudioTracks()[0],
                 effects: [],
             })
         }
 
         const videoTracks = mediaStream.getVideoTracks();
         if(videoTracks.length) {
+            const videoStream = new MediaStream(videoTracks);
             metaDatas.push({
                 sourceId: null,
                 sourceType: 'proxy',
-                stream: mediaStream,
-                track: videoTracks[0],
+                stream: videoStream,
+                track: videoStream.getVideoTracks()[0],
                 videoType: VideoType.CAMERA,
                 effects: [],
             }); 
