@@ -423,7 +423,7 @@ export default {
                 sourceType: 'proxy',
                 stream: videoStream,
                 track: videoStream.getVideoTracks()[0],
-                videoType: VideoType.CAMERA,
+                videoType: VideoType.DESKTOP,
                 effects: [],
             }); 
         }
