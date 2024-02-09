@@ -1,14 +1,20 @@
 /* global $, JitsiMeetJS */
 
+const domain = "vs-jitsi-single.saver.jp";
 const options = {
     hosts: {
-        domain: 'jitsi-meet.example.com',
-        muc: 'conference.jitsi-meet.example.com'
+        domain,
+        muc: 'conference.' + domain,
     },
-    bosh: '//jitsi-meet.example.com/http-bind'
+    serviceUrl: 'wss://' + domain + "/xmpp-websocket",
 };
 
+const confName = "testroom1234";
+
 const confOptions = {
+  p2p: {
+    enabled: false,
+  }
 };
 
 let connection = null;
@@ -124,7 +130,7 @@ function onUserLeft(id) {
  * That function is called when connection is established successfully
  */
 function onConnectionSuccess() {
-    room = connection.initJitsiConference('conference', confOptions);
+    room = connection.initJitsiConference(confName, confOptions);
     room.on(JitsiMeetJS.events.conference.TRACK_ADDED, onRemoteTrack);
     room.on(JitsiMeetJS.events.conference.TRACK_REMOVED, track => {
         console.log(`track removed!!!${track}`);
